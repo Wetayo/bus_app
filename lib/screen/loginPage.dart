@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:dropdownfield/dropdownfield.dart';
 import 'package:wetayo_bus/components/busNum_input_field.dart';
 import 'package:wetayo_bus/components/routeId_input_field.dart';
 import 'package:wetayo_bus/components/text_field_container.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+
+import 'MainScreen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -13,8 +15,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String routeId = "";
-  String busNum = "";
+  String _routeId = "";
+  String _busNum = "";
+
+  void onClickLogin(BuildContext context, String routeId, String busNum) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainScreen(routeId: routeId, busNum: busNum),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,16 +74,16 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "RouteId",
                               onChanged: (value) {
                                 setState(() {
-                                  routeId = value;
-                                  print('routeId >> $routeId');
+                                  _routeId = value;
+                                  print('routeId >> $_routeId');
                                 });
                               },
                             ),
                             RoundedBusNumField(
                               onChanged: (value) {
                                 setState(() {
-                                  busNum = value;
-                                  print('busNum >> $busNum');
+                                  _busNum = value;
+                                  print('busNum >> $_busNum');
                                 });
                               },
                             ),
@@ -83,17 +93,18 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               child: RaisedButton(
                                 child: Text("로그인"),
-                                onPressed: () {},
+                                onPressed: () =>
+                                    onClickLogin(context, _routeId, _busNum),
                               ),
                               color: Colors.indigo,
                             ),
                             Text(
-                              'routId : $routeId',
+                              'routId : $_routeId',
                               style: TextStyle(
                                   color: Colors.black, fontSize: 10.0),
                             ),
                             Text(
-                              'busNum : $busNum',
+                              'busNum : $_busNum',
                               style: TextStyle(
                                   color: Colors.black, fontSize: 10.0),
                             )
