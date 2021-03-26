@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   dropdownfield: ^1.0.3
   graphql_flutter: ^4.0.1
+  foldable_sidebar: ^1.0.0
 
 dev_dependencies:
   flutter_test:

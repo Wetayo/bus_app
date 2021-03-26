@@ -13,10 +13,9 @@ class _MainScreen extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Column(
-        children: <Widget>[Text(widget.routeId), Text(widget.busNum)],
+      body: Stack(
+        children: <Widget>[],
       ),
-    ));
+    );
   }
 }
