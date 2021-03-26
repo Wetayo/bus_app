@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:dropdownfield/dropdownfield.dart';
+import 'package:wetayo_bus/components/busNum_input_field.dart';
+import 'package:wetayo_bus/components/routeId_input_field.dart';
+import 'package:wetayo_bus/components/text_field_container.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({
+    Key key,
+  }) : super(key: key);
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String routeId = "";
+  String busNum = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,29 +60,42 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(
                               height: 20.0,
                             ),
-                            Container(
-                                color: Colors.indigo,
-                                width: 300.0,
-                                child: DropDownField(
-                                  controller: testSelected,
-                                  hintText: "Select any Test",
-                                  enabled: true,
-                                  itemsVisibleInDropdown: 4,
-                                  items: test,
-                                  onValueChanged: (value) {
-                                    setState(() {
-                                      selectTest = value;
-                                    });
-                                  },
-                                )),
+                            RoundedRouteIdField(
+                              hintText: "RouteId",
+                              onChanged: (value) {
+                                setState(() {
+                                  routeId = value;
+                                  print('routeId >> $routeId');
+                                });
+                              },
+                            ),
+                            RoundedBusNumField(
+                              onChanged: (value) {
+                                setState(() {
+                                  busNum = value;
+                                  print('busNum >> $busNum');
+                                });
+                              },
+                            ),
                             SizedBox(
                               height: 20.0,
                             ),
                             Container(
                               child: RaisedButton(
                                 child: Text("로그인"),
+                                onPressed: () {},
                               ),
                               color: Colors.indigo,
+                            ),
+                            Text(
+                              'routId : $routeId',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 10.0),
+                            ),
+                            Text(
+                              'busNum : $busNum',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 10.0),
                             )
                           ],
                         ),
@@ -89,16 +111,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-String selectTest = "";
-
-final testSelected = TextEditingController();
-List<String> test = [
-  "11가1234",
-  "21가1234",
-  "31가1234",
-  "15가1514",
-  "56버1323",
-  "23버5124",
-  "83허1235"
-];
