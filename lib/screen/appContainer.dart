@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wetayo_bus/components/menuItems.dart';
+import 'package:wetayo_bus/main.dart';
+import 'package:wetayo_bus/model/loginState.dart';
 import 'package:wetayo_bus/screen/homeScreen.dart';
 import 'package:wetayo_bus/screen/settingScreen.dart';
+import 'package:provider/provider.dart';
 
 class AppContainer extends StatefulWidget {
   @override
@@ -85,14 +88,25 @@ class _AppContainState extends State<AppContainer> {
                     ),
                   ),
                 ),
-                Container(
-                  child: MenuItems(
-                    menuIcons: "icon_logout",
-                    menuItems: "Logout",
-                    index: menuItems.length + 1,
-                    selected: selectedMenuItem,
+                GestureDetector(
+                  onTap: () {
+                    // final SimpleState state =
+                    //     Provider.of<SimpleState>(context, listen: false);
+                    // state.setRouteId(null);
+                    // state.setBusNum(null);
+
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, ROOT_PAGE, (route) => false);
+                  },
+                  child: Container(
+                    child: MenuItems(
+                      menuIcons: "icon_logout",
+                      menuItems: "Logout",
+                      index: menuItems.length + 1,
+                      selected: selectedMenuItem,
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
