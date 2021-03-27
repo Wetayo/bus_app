@@ -50,6 +50,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/WETAYO_CI01.png
+    - assets/icon_add.png
+    - assets/icon_home.png
+    - assets/icon_logout.png
+    - assets/icon_settings.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
