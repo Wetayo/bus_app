@@ -39,13 +39,29 @@ class _AppContainState extends State<AppContainer> {
 
   double xOffset = 60;
   double yOffset = 0;
+  double pageScale = 1;
 
   int selectedMenuItem = 0;
+
+  String pageTitle = 'Homepage';
 
   void setSidebarState() {
     setState(() {
       xOffset = sidebarOpen ? 265 : 60;
+      yOffset = sidebarOpen ? 30 : 0;
+      pageScale = sidebarOpen ? 0.8 : 1;
     });
+  }
+
+  void setPageTitle() {
+    switch (selectedMenuItem) {
+      case 0:
+        pageTitle = 'HomePage';
+        break;
+      case 1:
+        pageTitle = 'Setting';
+        break;
+    }
   }
 
   @override
@@ -64,25 +80,32 @@ class _AppContainState extends State<AppContainer> {
                 ),
                 Container(
                   child: Expanded(
-                      child: new ListView.builder(
-                    itemCount: menuItems.length,
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        sidebarOpen = false;
-                        selectedMenuItem = index;
-                        setSidebarState();
-                      },
-                      child: MenuItems(
-                        menuIcons: menuIcons,
-                        menuItems: menuItems,
-                        index: index,
-                        selected: selectedMenuItem,
+                    child: new ListView.builder(
+                      itemCount: menuItems.length,
+                      itemBuilder: (context, index) => GestureDetector(
+                        onTap: () {
+                          sidebarOpen = false;
+                          selectedMenuItem = index;
+                          setSidebarState();
+                          setPageTitle();
+                        },
+                        child: MenuItems(
+                          menuIcons: menuIcons[index],
+                          menuItems: menuItems[index],
+                          index: index,
+                          selected: selectedMenuItem,
+                        ),
                       ),
                     ),
-                  )),
+                  ),
                 ),
                 Container(
-                  child: Text('Logout'),
+                  child: MenuItems(
+                    menuIcons: "icon_logout",
+                    menuItems: "Logout",
+                    index: menuItems.length + 1,
+                    selected: selectedMenuItem,
+                  ),
                 )
               ],
             ),
@@ -90,10 +113,15 @@ class _AppContainState extends State<AppContainer> {
           AnimatedContainer(
             curve: Curves.easeInOut,
             duration: Duration(milliseconds: 200),
-            transform: Matrix4.translationValues(xOffset, yOffset, 1.0),
+            transform: Matrix4.translationValues(xOffset, yOffset, 1.0)
+              ..scale(pageScale),
             width: double.infinity,
             height: double.infinity,
-            color: Colors.white,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: sidebarOpen
+                    ? BorderRadius.circular(20.0)
+                    : BorderRadius.circular(0)),
             child: Column(
               children: <Widget>[
                 Container(
@@ -111,6 +139,13 @@ class _AppContainState extends State<AppContainer> {
                           padding: const EdgeInsets.all(20.0),
                           child: Icon(Icons.menu),
                         ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                        child: Text(
+                          pageTitle,
+                          style: TextStyle(fontSize: 18.0),
+                        ),
                       )
                     ],
                   ),
@@ -127,14 +162,14 @@ class _AppContainState extends State<AppContainer> {
 class MenuItems extends StatelessWidget {
   const MenuItems({
     Key key,
-    @required this.menuIcons,
-    @required this.menuItems,
+    this.menuIcons,
+    this.menuItems,
     this.index,
     this.selected,
   }) : super(key: key);
 
-  final List<String> menuIcons;
-  final List<String> menuItems;
+  final String menuIcons;
+  final String menuItems;
   final int index;
   final int selected;
 
@@ -146,12 +181,12 @@ class MenuItems extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.all(20.0),
-            child: Image.asset('assets/${menuIcons[index]}.png'),
+            child: Image.asset('assets/$menuIcons.png'),
           ),
           Container(
             padding: const EdgeInsets.all(20.0),
             child: Text(
-              menuItems[index],
+              menuItems,
               style: TextStyle(color: Colors.white, fontSize: 10.0),
             ),
           )
