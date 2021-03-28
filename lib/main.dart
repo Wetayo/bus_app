@@ -19,18 +19,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
 
-    return MaterialApp(
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Colors.black,
-        accentColor: Colors.white,
-      ),
-      title: 'LoginForm',
-      debugShowCheckedModeBanner: false,
-      initialRoute: ROOT_PAGE,
-      routes: {
-        ROOT_PAGE: (context) => LoginPage(),
-        MAIN_PAGE: (context) => MainScreen()
+    return Consumer<SimpleState>(
+      builder: (final BuildContext context, final SimpleState authProvider,
+          final Widget child) {
+        return MaterialApp(
+          theme: ThemeData(
+            brightness: Brightness.dark,
+            primaryColor: Colors.black,
+            accentColor: Colors.white,
+          ),
+          title: 'LoginForm',
+          debugShowCheckedModeBanner: false,
+          // initialRoute: ROOT_PAGE,
+          // routes: {
+          //   ROOT_PAGE: (context) => LoginPage(),
+          //   MAIN_PAGE: (context) => MainScreen()
+          // },
+          home: authProvider.isAuthenticated ? MainScreen() : LoginPage(),
+        );
       },
     );
   }

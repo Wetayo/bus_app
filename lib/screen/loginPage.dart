@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<SimpleState>(context, listen: false);
     return Scaffold(
       body: Container(
         child: SafeArea(
@@ -103,8 +104,11 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               child: RaisedButton(
                                 child: Text("로그인"),
-                                onPressed: () =>
-                                    onClickLogin(context, _routeId, _busNum),
+                                onPressed: () async {
+                                  await authProvider.login(_routeId, _busNum);
+                                  authProvider.setRouteId(_routeId);
+                                  authProvider.setBusNum(_busNum);
+                                },
                               ),
                               color: Color(0xFFB1F2B36),
                             ),

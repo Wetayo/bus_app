@@ -90,13 +90,7 @@ class _AppContainState extends State<AppContainer> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // final SimpleState state =
-                    //     Provider.of<SimpleState>(context, listen: false);
-                    // state.setRouteId(null);
-                    // state.setBusNum(null);
-
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, ROOT_PAGE, (route) => false);
+                    logoutAlert(context);
                   },
                   child: Container(
                     child: MenuItems(
@@ -158,6 +152,46 @@ class _AppContainState extends State<AppContainer> {
           ),
         ],
       ),
+    );
+  }
+
+  Future logoutAlert(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('로그아웃'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[Text('정말 로그아웃 하시겠습니까?')],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: Text('확인'),
+                onPressed: () {
+                  // final SimpleState state =
+                  //     Provider.of<SimpleState>(context, listen: false);
+                  // state.setRouteId(null);
+                  // state.setBusNum(null);
+
+                  // Navigator.pushNamedAndRemoveUntil(
+                  //     context, ROOT_PAGE, (route) => false);
+
+                  final auth = Provider.of<SimpleState>(context, listen: false);
+                  auth.logout();
+                  Navigator.of(context).pop();
+                }),
+            FlatButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
