@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wetayo_bus/model/loginState.dart';
 
 import 'AppContainer.dart';
 
@@ -19,9 +21,15 @@ class _MainScreen extends State<MainScreen> {
       theme: ThemeData(),
       title: 'WetayoBus',
       home: Scaffold(
-        body: Container(
-          color: Color(0xFFB1F2B36),
-          child: AppContainer(),
+        body: Consumer<SimpleState>(
+          builder: (context, state, child) {
+            print(
+                'login 성공 >> ${state.routeId}    login 성공 >> ${state.busNum}');
+            return Container(
+              color: Color(0xFFB1F2B36),
+              child: AppContainer(),
+            );
+          },
         ),
       ),
     );

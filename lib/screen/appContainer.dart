@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wetayo_bus/components/menuItems.dart';
+import 'package:wetayo_bus/main.dart';
+import 'package:wetayo_bus/model/loginState.dart';
 import 'package:wetayo_bus/screen/homeScreen.dart';
 import 'package:wetayo_bus/screen/settingScreen.dart';
+import 'package:provider/provider.dart';
 
 class AppContainer extends StatefulWidget {
   @override
@@ -85,14 +88,19 @@ class _AppContainState extends State<AppContainer> {
                     ),
                   ),
                 ),
-                Container(
-                  child: MenuItems(
-                    menuIcons: "icon_logout",
-                    menuItems: "Logout",
-                    index: menuItems.length + 1,
-                    selected: selectedMenuItem,
+                GestureDetector(
+                  onTap: () {
+                    logoutAlert(context);
+                  },
+                  child: Container(
+                    child: MenuItems(
+                      menuIcons: "icon_logout",
+                      menuItems: "Logout",
+                      index: menuItems.length + 1,
+                      selected: selectedMenuItem,
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -144,6 +152,46 @@ class _AppContainState extends State<AppContainer> {
           ),
         ],
       ),
+    );
+  }
+
+  Future logoutAlert(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('로그아웃'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[Text('정말 로그아웃 하시겠습니까?')],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: Text('확인'),
+                onPressed: () {
+                  // final SimpleState state =
+                  //     Provider.of<SimpleState>(context, listen: false);
+                  // state.setRouteId(null);
+                  // state.setBusNum(null);
+
+                  // Navigator.pushNamedAndRemoveUntil(
+                  //     context, ROOT_PAGE, (route) => false);
+
+                  final auth = Provider.of<SimpleState>(context, listen: false);
+                  auth.logout();
+                  Navigator.of(context).pop();
+                }),
+            FlatButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

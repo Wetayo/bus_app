@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wetayo_bus/components/busNum_input_field.dart';
 import 'package:wetayo_bus/components/routeId_input_field.dart';
-import 'package:wetayo_bus/components/text_field_container.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:wetayo_bus/main.dart';
+import 'package:wetayo_bus/model/loginState.dart';
 
 import 'MainScreen.dart';
 
@@ -19,15 +21,24 @@ class _LoginPageState extends State<LoginPage> {
   String _busNum = "";
 
   void onClickLogin(BuildContext context, String routeId, String busNum) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MainScreen(routeId: routeId, busNum: busNum),
-        ));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => MainScreen(routeId: routeId, busNum: busNum),
+    //     ));
+
+    //// 상태 관리 버전
+    print('Login Push');
+    final SimpleState state = Provider.of<SimpleState>(context, listen: false);
+    state.setRouteId(routeId);
+    state.setBusNum(busNum);
+
+    Navigator.pushNamed(context, MAIN_PAGE);
   }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<SimpleState>(context, listen: false);
     return Scaffold(
       body: Container(
         child: SafeArea(
@@ -93,10 +104,14 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               child: RaisedButton(
                                 child: Text("로그인"),
-                                onPressed: () =>
-                                    onClickLogin(context, _routeId, _busNum),
+                                onPressed: () async {
+                                  await authProvider.login(
+                                      context, _routeId, _busNum);
+                                  authProvider.setRouteId(_routeId);
+                                  authProvider.setBusNum(_busNum);
+                                },
                               ),
-                              color: Colors.indigo,
+                              color: Color(0xFFB1F2B36),
                             ),
                             Text(
                               'routId : $_routeId',
