@@ -28,9 +28,16 @@ class SimpleState extends ChangeNotifier {
     return this._isAuthenticated;
   }
 
-  Future login(String routeId, String busNum) async {
+  Future login(BuildContext context, String routeId, String busNum) async {
     print('login 호출');
-    print(isAuthenticated);
+    print(routeId);
+
+    if (routeId == '' || busNum == '') {
+      print('실패');
+      _loginFailedAlert(context, '필드를 채워주세요.');
+      return;
+    }
+
     isAuthenticated = true;
     print(isAuthenticated);
   }
@@ -39,4 +46,22 @@ class SimpleState extends ChangeNotifier {
     print('logout 호출');
     isAuthenticated = false;
   }
+
+  void _loginFailedAlert(BuildContext context, String text) =>
+      showDialog<AlertDialog>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(text),
+            actions: <Widget>[
+              SimpleDialogOption(
+                child: const Text('확인'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        },
+      );
 }

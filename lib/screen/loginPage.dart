@@ -105,7 +105,8 @@ class _LoginPageState extends State<LoginPage> {
                               child: RaisedButton(
                                 child: Text("로그인"),
                                 onPressed: () async {
-                                  await authProvider.login(_routeId, _busNum);
+                                  await authProvider.login(
+                                      context, _routeId, _busNum);
                                   authProvider.setRouteId(_routeId);
                                   authProvider.setBusNum(_busNum);
                                 },
