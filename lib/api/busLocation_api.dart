@@ -2,7 +2,7 @@ const String _urlPrefix =
     'http://openapi.gbis.go.kr/ws/rest/buslocationservice?serviceKey=';
 const String _serviceKey = '1122334455';
 const String _idPrefix = '&routeId=';
-const String _defaultid = '233000031';
+const String _defaultid = '';
 
 const String STATUS_OK = '0';
 

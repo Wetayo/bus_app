@@ -10,6 +10,7 @@ import 'package:xml2json/xml2json.dart';
 import 'dart:convert';
 
 import '../api/busLocation_api.dart' as location_api;
+import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -63,7 +64,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [MyNextStation()],
+                      children: [
+                        Consumer<SimpleState>(
+                          builder: (context, state, child) {
+                            return MyNextStation(
+                              routeId: state.routeId,
+                              busNum: '경기70사1161',
+                            );
+                          },
+                        ),
+                        //Container(),
+                      ],
                     ),
                   ),
                 ),
@@ -90,12 +101,18 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class MyNextStation extends StatefulWidget {
+  final String routeId;
+  final String busNum;
+
+  MyNextStation({Key key, this.routeId, this.busNum}) : super(key: key);
+
   @override
   _MyNestStationState createState() => _MyNestStationState();
 }
 
 class _MyNestStationState extends State<MyNextStation> {
   bool _isLoading = false;
+  int myidx = 0;
 
   final Xml2Json xml2Json = Xml2Json();
 
@@ -104,16 +121,20 @@ class _MyNestStationState extends State<MyNextStation> {
   @override
   void initState() {
     super.initState();
-    _getLocationBusList();
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      _getLocationBusList();
+    });
   }
 
   _getLocationBusList() async {
-    //setState(() => _isLoading = true);
+    setState(() => _isLoading = true);
 
     //String station = _stationController.text;
-
-    print('widget item >> 233000031');
-    var response = await http.get(location_api.buildUrl('233000031'));
+    Consumer<SimpleState>(
+      builder: (context, state, child) {},
+    );
+    print('widget item >> ${widget.routeId}');
+    var response = await http.get(location_api.buildUrl(widget.routeId));
     String responseBody = response.body;
     xml2Json.parse(responseBody);
     var jsonString = xml2Json.toParker();
@@ -166,25 +187,28 @@ class _MyNestStationState extends State<MyNextStation> {
       }
 
       int whereidx =
-          list.indexWhere((list) => list.plateNo.startsWith('경기70사1128'));
+          list.indexWhere((list) => list.plateNo.startsWith(widget.busNum));
+      myidx = whereidx;
       print('idx >> $whereidx');
       print('here!! >> ${_locateData[whereidx].plateNo}');
       print('previous >> ${_locateData[whereidx - 1].plateNo}');
       print('next >> ${_locateData[whereidx + 1].plateNo}');
-      //_isLoading = false;
+      _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Consumer<SimpleState>(
-          builder: (context, state, child) {
-            return Text(_locateData[0].stationSeq);
-          },
-        ),
-      ],
-    );
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Column(
+            children: <Widget>[
+              Consumer<SimpleState>(
+                builder: (context, state, child) {
+                  return Text(_locateData[myidx].stationId);
+                },
+              ),
+            ],
+          );
   }
 }
