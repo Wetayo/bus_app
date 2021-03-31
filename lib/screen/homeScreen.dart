@@ -13,105 +13,21 @@ import '../api/busLocation_api.dart' as location_api;
 import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
+  final String routeId;
+  final String busNum;
+
+  HomeScreen({
+    Key key,
+    this.routeId,
+    this.busNum,
+  }) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 50.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                TimeInHourAndMinute(),
-                SizedBox(
-                  width: 100,
-                )
-              ],
-            ),
-            SizedBox(
-              height: 50.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.indigo,
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  height: MediaQuery.of(context).size.height * 0.42,
-                  width: MediaQuery.of(context).size.width * 0.28,
-                ),
-                SizedBox(
-                  width: 30.0,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.indigo,
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  width: MediaQuery.of(context).size.width * 0.28,
-                  child: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Consumer<SimpleState>(
-                          builder: (context, state, child) {
-                            return MyNextStation(
-                              routeId: state.routeId,
-                              busNum: '경기70사1161',
-                            );
-                          },
-                        ),
-                        //Container(),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 30.0,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.indigo,
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  height: MediaQuery.of(context).size.height * 0.42,
-                  width: MediaQuery.of(context).size.width * 0.28,
-                ),
-                SizedBox(
-                  width: 60.0,
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class MyNextStation extends StatefulWidget {
-  final String routeId;
-  final String busNum;
-
-  MyNextStation({Key key, this.routeId, this.busNum}) : super(key: key);
-
-  @override
-  _MyNestStationState createState() => _MyNestStationState();
-}
-
-class _MyNestStationState extends State<MyNextStation> {
-  bool _isLoading = false;
+  bool _isLoading = true;
   int myidx = 0;
 
   final Xml2Json xml2Json = Xml2Json();
@@ -121,18 +37,16 @@ class _MyNestStationState extends State<MyNextStation> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 10), (timer) {
-      _getLocationBusList();
-    });
+    // Timer.periodic(Duration(seconds: 10), (timer) {
+    //   _getLocationBusList();
+    // });
+    _getLocationBusList();
   }
 
   _getLocationBusList() async {
     setState(() => _isLoading = true);
 
     //String station = _stationController.text;
-    Consumer<SimpleState>(
-      builder: (context, state, child) {},
-    );
     print('widget item >> ${widget.routeId}');
     var response = await http.get(location_api.buildUrl(widget.routeId));
     String responseBody = response.body;
@@ -199,16 +113,110 @@ class _MyNestStationState extends State<MyNextStation> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : Column(
-            children: <Widget>[
-              Consumer<SimpleState>(
-                builder: (context, state, child) {
-                  return Text(_locateData[myidx].stationId);
-                },
-              ),
-            ],
-          );
+    return SafeArea(
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 50.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                TimeInHourAndMinute(),
+                SizedBox(
+                  width: 100,
+                )
+              ],
+            ),
+            SizedBox(
+              height: 50.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.indigo,
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  height: MediaQuery.of(context).size.height * 0.42,
+                  width: MediaQuery.of(context).size.width * 0.28,
+                ),
+                SizedBox(
+                  width: 30.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.indigo,
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.28,
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _isLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : MyNextStation(
+                                myidx: myidx,
+                                locateData: _locateData,
+                              ),
+                        //Container(),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 30.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.indigo,
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  height: MediaQuery.of(context).size.height * 0.42,
+                  width: MediaQuery.of(context).size.width * 0.28,
+                ),
+                SizedBox(
+                  width: 60.0,
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyNextStation extends StatefulWidget {
+  final int myidx;
+
+  final List<locationBus> locateData;
+
+  MyNextStation({
+    Key key,
+    this.myidx,
+    this.locateData,
+  }) : super(key: key);
+
+  @override
+  _MyNestStationState createState() => _MyNestStationState();
+}
+
+class _MyNestStationState extends State<MyNextStation> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Consumer<SimpleState>(
+          builder: (context, state, child) {
+            return Text(widget.locateData[widget.myidx].stationId);
+          },
+        ),
+      ],
+    );
   }
 }
