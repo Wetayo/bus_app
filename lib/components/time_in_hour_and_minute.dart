@@ -15,9 +15,11 @@ class _TimeInHourAndMinuteState extends State<TimeInHourAndMinute> {
     super.initState();
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (_timeOfDay.minute != TimeOfDay.now().minute) {
-        setState(() {
-          _timeOfDay = TimeOfDay.now();
-        });
+        if (mounted) {
+          setState(() {
+            _timeOfDay = TimeOfDay.now();
+          });
+        }
       }
     });
   }

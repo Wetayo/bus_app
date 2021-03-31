@@ -47,7 +47,11 @@ class _AppContainState extends State<AppContainer> {
   Widget setPageContent() {
     switch (selectedMenuItem) {
       case 0:
-        return HomeScreen();
+        return Consumer<SimpleState>(
+          builder: (context, state, child) {
+            return HomeScreen(routeId: '233000031', busNum: '경기70사1149');
+          },
+        );
       case 1:
         return SettingScreen();
     }
