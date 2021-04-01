@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:wetayo_bus/model/locationBus.dart';
 import 'package:wetayo_bus/model/stationRoute.dart';
 
-class NextBus extends StatefulWidget {
+class PreviousBus extends StatefulWidget {
   final int myidx;
 
   final List<locationBus> locateData;
   final List<stationRoute> stationData;
 
-  NextBus({
+  PreviousBus({
     Key key,
     this.myidx,
     this.locateData,
@@ -16,14 +16,14 @@ class NextBus extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _NextBusState createState() => _NextBusState();
+  _PreviousBusState createState() => _PreviousBusState();
 }
 
-class _NextBusState extends State<NextBus> {
+class _PreviousBusState extends State<PreviousBus> {
   int idx = 0;
   int reaminStation = 0;
 
-  bool _isNextBus = true;
+  bool _isPreviousBus = true;
 
   @override
   void initState() {
@@ -40,25 +40,24 @@ class _NextBusState extends State<NextBus> {
         List<stationRoute> stationList = widget.stationData;
 
         idx = stationList.indexWhere((stationList) => stationList.stationId
-            .startsWith(widget.locateData[widget.myidx + 1].stationId));
+            .startsWith(widget.locateData[widget.myidx + -1].stationId));
 
-        reaminStation =
-            int.parse(widget.locateData[widget.myidx + 1].stationSeq) -
-                int.parse(widget.locateData[widget.myidx].stationSeq);
+        reaminStation = int.parse(widget.locateData[widget.myidx].stationSeq) -
+            int.parse(widget.locateData[widget.myidx - 1].stationSeq);
 
-        print('nextBus ${widget.locateData[widget.myidx + 1].stationId}');
-        print('nextBus idx >> $idx');
+        print('PreviousBus ${widget.locateData[widget.myidx - 1].stationId}');
+        print('PreviousBus idx >> $idx');
         if (idx == -1) {
           throw RangeError('error');
         }
 
-        _isNextBus = false;
+        _isPreviousBus = false;
       });
     } on RangeError catch (e) {
       print('set test');
       setState(() {
         print('test range');
-        _isNextBus = true;
+        _isPreviousBus = true;
       });
     }
   }
@@ -70,7 +69,7 @@ class _NextBusState extends State<NextBus> {
         Center(
           child: Container(
             padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-            child: _isNextBus
+            child: _isPreviousBus
                 ? Text(
                     '없어요ㅠㅠ',
                     style: TextStyle(
@@ -95,7 +94,7 @@ class _NextBusState extends State<NextBus> {
         Center(
           child: Container(
             padding: const EdgeInsets.all(15.0),
-            child: _isNextBus
+            child: _isPreviousBus
                 ? Text(
                     '',
                     style: TextStyle(
@@ -105,7 +104,7 @@ class _NextBusState extends State<NextBus> {
                     textAlign: TextAlign.center,
                   )
                 : Text(
-                    '$reaminStation 개 앞에 있어요',
+                    '$reaminStation 개 전에 있어요',
                     style: TextStyle(
                         fontSize: 35.0,
                         fontWeight: FontWeight.bold,

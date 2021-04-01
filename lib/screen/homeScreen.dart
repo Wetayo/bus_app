@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wetayo_bus/components/myNextStation.dart';
 import 'package:wetayo_bus/components/nextBus.dart';
+import 'package:wetayo_bus/components/previousBus.dart';
 
 import 'package:wetayo_bus/components/time_in_hour_and_minute.dart';
 import 'package:wetayo_bus/model/locationBus.dart';
@@ -33,6 +34,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading0 = true;
   bool _isLoading1 = true;
+  bool _isLoading2 = true;
   int myidx = 0;
   int stationIdx = 0;
 
@@ -47,17 +49,20 @@ class _HomeScreenState extends State<HomeScreen> {
     _getStationRoute();
     _getLocationBusList();
 
-    Timer.periodic(Duration(seconds: 10), (timer) {
-      _getStationRoute();
-      _getLocationBusList();
-    });
+    // Timer.periodic(Duration(seconds: 10), (timer) {
+    //   _getStationRoute();
+    //   _getLocationBusList();
+    // });
   }
 
   // ***********************************
   // 실시간 버스 도착정보를 보기위한 비동기 함수
   // ***********************************
   _getLocationBusList() async {
-    setState(() => _isLoading0 = true);
+    setState(() {
+      _isLoading0 = true;
+      _isLoading2 = true;
+    });
 
     //String station = _stationController.text;
     print('widget item >> ${widget.routeId}');
@@ -79,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         _locateData = const [];
         _isLoading0 = false;
+        _isLoading2 = false;
       });
       return;
     }
@@ -116,10 +122,11 @@ class _HomeScreenState extends State<HomeScreen> {
           list.indexWhere((list) => list.plateNo.startsWith(widget.busNum));
       myidx = whereidx;
       print('idx >> $whereidx');
-      print('here!! >> ${_locateData[whereidx].plateNo}');
-      print('previous >> ${_locateData[whereidx - 1].plateNo}');
-      print('next >> ${_locateData[whereidx + 1].plateNo}');
+      //print('here!! >> ${_locateData[whereidx].plateNo}');
+      //print('previous >> ${_locateData[whereidx - 1].plateNo}');
+      //print('next >> ${_locateData[whereidx + 1].plateNo}');
       _isLoading0 = false;
+      _isLoading2 = false;
     });
   }
 
@@ -239,8 +246,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.white,
                           ),
                         ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 10.0, left: 15.0),
+                          child: Text(
+                            '▶︎ 정류장',
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                color: Colors.yellow,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                         SizedBox(
-                          height: 30.0,
+                          height: 10.0,
                         ),
                         _isLoading0
                             ? Center(
@@ -287,8 +304,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.white,
                           ),
                         ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 15.0, left: 15.0),
+                          child: Text(
+                            '▶︎ 정류장',
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                color: Colors.yellow,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                         SizedBox(
-                          height: 50.0,
+                          height: 20.0,
                         ),
                         _isLoading1
                             ? Center(
@@ -313,6 +340,54 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   height: MediaQuery.of(context).size.height * 0.42,
                   width: MediaQuery.of(context).size.width * 0.28,
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, top: 25.0, bottom: 10.0),
+                          child: Text(
+                            '이전 버스',
+                            style: TextStyle(
+                              fontSize: (35.0),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[50],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 10.0, left: 15.0),
+                          child: Text(
+                            '▶︎ 정류장',
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                color: Colors.yellow,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _isLoading2
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : PreviousBus(
+                                myidx: myidx,
+                                locateData: _locateData,
+                                stationData: _stationData,
+                              )
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(
                   width: 60.0,
