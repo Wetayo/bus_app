@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wetayo_bus/api/config_api.dart';
 import 'package:wetayo_bus/components/myNextStation.dart';
 import 'package:wetayo_bus/components/nextBus.dart';
 import 'package:wetayo_bus/components/previousBus.dart';
@@ -49,10 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _getStationRoute();
     _getLocationBusList();
 
-    // Timer.periodic(Duration(seconds: 10), (timer) {
-    //   _getStationRoute();
-    //   _getLocationBusList();
-    // });
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      _getStationRoute();
+      _getLocationBusList();
+    });
   }
 
   // ***********************************
@@ -321,10 +323,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? Center(
                                 child: CircularProgressIndicator(),
                               )
-                            : MyNextStation(
-                                myidx: myidx,
-                                locateData: _locateData,
-                                stationData: _stationData,
+                            : GraphQLProvider(
+                                client: graphqlService.client,
+                                child: MyNextStation(
+                                  myidx: myidx,
+                                  locateData: _locateData,
+                                  stationData: _stationData,
+                                ),
                               ),
                         //Container(),
                       ],

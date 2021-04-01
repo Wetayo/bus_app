@@ -55,7 +55,7 @@ class _AppContainState extends State<AppContainer> {
       case 0:
         return Consumer<SimpleState>(
           builder: (context, state, child) {
-            return HomeScreen(routeId: '233000031', busNum: '경기70사1139');
+            return HomeScreen(routeId: '233000031', busNum: '경기70사1155');
           },
         );
       case 1:
