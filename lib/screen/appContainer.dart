@@ -25,6 +25,12 @@ class _AppContainState extends State<AppContainer> {
 
   String pageTitle = 'Homepage';
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   void setSidebarState() {
     setState(() {
       xOffset = sidebarOpen ? 265 : 60;
@@ -49,7 +55,7 @@ class _AppContainState extends State<AppContainer> {
       case 0:
         return Consumer<SimpleState>(
           builder: (context, state, child) {
-            return HomeScreen(routeId: '233000031', busNum: '경기70사1149');
+            return HomeScreen(routeId: '233000031', busNum: '경기70사1143');
           },
         );
       case 1:
