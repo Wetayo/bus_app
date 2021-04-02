@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wetayo_bus/api/config_api.dart';
+import 'package:wetayo_bus/components/myNextStation.dart';
+import 'package:wetayo_bus/components/nextBus.dart';
+import 'package:wetayo_bus/components/previousBus.dart';
 
 import 'package:wetayo_bus/components/time_in_hour_and_minute.dart';
 import 'package:wetayo_bus/model/locationBus.dart';
@@ -29,8 +34,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isLoading = true;
+  bool _isLoading0 = true;
+  bool _isLoading1 = true;
+  bool _isLoading2 = true;
   int myidx = 0;
+  int stationIdx = 0;
 
   final Xml2Json xml2Json = Xml2Json();
 
@@ -42,16 +50,21 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _getStationRoute();
     _getLocationBusList();
-    // Timer.periodic(Duration(seconds: 10), (timer) {
-    //   _getLocationBusList();
-    // });
+
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      _getStationRoute();
+      _getLocationBusList();
+    });
   }
 
   // ***********************************
   // 실시간 버스 도착정보를 보기위한 비동기 함수
   // ***********************************
   _getLocationBusList() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading0 = true;
+      _isLoading2 = true;
+    });
 
     //String station = _stationController.text;
     print('widget item >> ${widget.routeId}');
@@ -72,7 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
         print('error >> $errMessage');
 
         _locateData = const [];
-        _isLoading = false;
+        _isLoading0 = false;
+        _isLoading2 = false;
       });
       return;
     }
@@ -110,10 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
           list.indexWhere((list) => list.plateNo.startsWith(widget.busNum));
       myidx = whereidx;
       print('idx >> $whereidx');
-      print('here!! >> ${_locateData[whereidx].plateNo}');
-      print('previous >> ${_locateData[whereidx - 1].plateNo}');
-      print('next >> ${_locateData[whereidx + 1].plateNo}');
-      _isLoading = false;
+      //print('here!! >> ${_locateData[whereidx].plateNo}');
+      //print('previous >> ${_locateData[whereidx - 1].plateNo}');
+      //print('next >> ${_locateData[whereidx + 1].plateNo}');
+      _isLoading0 = false;
+      _isLoading2 = false;
     });
   }
 
@@ -121,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // 노선의 정류소 리스트를 조회하기 위한 비동기 함수
   // ***********************************
   _getStationRoute() async {
-    //setState(() => _isLoading = true);
+    setState(() => _isLoading1 = true);
 
     //String station = _stationController.text;
     //print('widget item >> ${widget.routeId}');
@@ -142,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
         print('Station error >> $errMessage');
 
         _locateData = const [];
-        //_isLoading = false;
+        _isLoading1 = false;
       });
       return;
     }
@@ -172,7 +187,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       _stationData = list;
-      //_isLoading = false;
+      _isLoading1 = false;
+      stationIdx = list.indexWhere(
+          (list) => list.stationId.startsWith(_locateData[myidx].stationId));
     });
   }
 
@@ -208,6 +225,54 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   height: MediaQuery.of(context).size.height * 0.42,
                   width: MediaQuery.of(context).size.width * 0.28,
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, top: 25.0, bottom: 10.0),
+                          child: Text(
+                            '앞 버스',
+                            style: TextStyle(
+                              fontSize: (35.0),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[50],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 10.0, left: 15.0),
+                          child: Text(
+                            '▶︎ 정류장',
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                color: Colors.yellow,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _isLoading0
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : NextBus(
+                                myidx: myidx,
+                                locateData: _locateData,
+                                stationData: _stationData,
+                              )
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(
                   width: 30.0,
@@ -220,15 +285,51 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: MediaQuery.of(context).size.width * 0.28,
                   child: SafeArea(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _isLoading
-                            ? Center(child: CircularProgressIndicator())
-                            : MyNextStation(
-                                myidx: myidx,
-                                locateData: _locateData,
-                                stationData: _stationData,
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, top: 25.0, bottom: 10.0),
+                          child: Text(
+                            '다음 정류장',
+                            style: TextStyle(
+                              fontSize: (40.0),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[50],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 15.0, left: 15.0),
+                          child: Text(
+                            '▶︎ 정류장',
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                color: Colors.yellow,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        _isLoading1
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : GraphQLProvider(
+                                client: graphqlService.client,
+                                child: MyNextStation(
+                                  myidx: myidx,
+                                  locateData: _locateData,
+                                  stationData: _stationData,
+                                ),
                               ),
                         //Container(),
                       ],
@@ -244,6 +345,54 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   height: MediaQuery.of(context).size.height * 0.42,
                   width: MediaQuery.of(context).size.width * 0.28,
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, top: 25.0, bottom: 10.0),
+                          child: Text(
+                            '이전 버스',
+                            style: TextStyle(
+                              fontSize: (35.0),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[50],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 10.0, left: 15.0),
+                          child: Text(
+                            '▶︎ 정류장',
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                color: Colors.yellow,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _isLoading2
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : PreviousBus(
+                                myidx: myidx,
+                                locateData: _locateData,
+                                stationData: _stationData,
+                              )
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(
                   width: 60.0,
@@ -253,54 +402,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class MyNextStation extends StatefulWidget {
-  final int myidx;
-
-  final List<locationBus> locateData;
-  final List<stationRoute> stationData;
-
-  MyNextStation({
-    Key key,
-    this.myidx,
-    this.locateData,
-    this.stationData,
-  }) : super(key: key);
-
-  @override
-  _MyNextStationState createState() => _MyNextStationState();
-}
-
-class _MyNextStationState extends State<MyNextStation> {
-  int idx = 0;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    test();
-  }
-
-  void test() {
-    setState(() {
-      List<stationRoute> stationList = widget.stationData;
-
-      idx = stationList.indexWhere((stationList) => stationList.stationId
-          .startsWith(widget.locateData[widget.myidx].stationId));
-      print('StationId >> ${widget.locateData[widget.myidx].stationId}');
-      print('StationName >> ${widget.stationData[idx].stationName}');
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(widget.stationData[idx].stationName),
-      ],
     );
   }
 }
