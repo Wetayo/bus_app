@@ -4,11 +4,18 @@ import 'package:wetayo_bus/screen/loginPage.dart';
 import 'package:provider/provider.dart';
 import 'package:wetayo_bus/screen/mainScreen.dart';
 import 'model/loginState.dart';
+import 'package:flutter_config/flutter_config.dart';
 
-void main() => runApp(ChangeNotifierProvider(
-      create: (_) => SimpleState(),
-      child: MyApp(),
-    ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await FlutterConfig.loadEnvVariables();
+
+  runApp(ChangeNotifierProvider(
+    create: (_) => SimpleState(),
+    child: MyApp(),
+  ));
+}
 
 const String ROOT_PAGE = '/';
 const String MAIN_PAGE = '/main';
