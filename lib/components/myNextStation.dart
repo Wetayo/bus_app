@@ -30,10 +30,10 @@ class _MyNextStationState extends State<MyNextStation> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    test();
+    matchStation();
   }
 
-  void test() {
+  void matchStation() {
     try {
       setState(() {
         List<stationRoute> stationList = widget.stationData;
@@ -48,9 +48,9 @@ class _MyNextStationState extends State<MyNextStation> {
         _isCurrentBus = false;
       });
     } on RangeError catch (e) {
-      print('set test');
+      print('set matchStation');
       setState(() {
-        print('test range');
+        print('matchStation range');
         _isCurrentBus = true;
       });
     }
