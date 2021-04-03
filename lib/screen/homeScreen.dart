@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _getLocationBusList();
 
     Timer.periodic(Duration(seconds: 10), (timer) {
-      _getStationRoute();
+      //_getStationRoute();
       _getLocationBusList();
     });
   }
@@ -63,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   _getLocationBusList() async {
     setState(() {
       _isLoading0 = true;
+      _isLoading1 = true;
       _isLoading2 = true;
     });
 
@@ -86,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         _locateData = const [];
         _isLoading0 = false;
+        _isLoading1 = false;
         _isLoading2 = false;
       });
       return;
@@ -128,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //print('previous >> ${_locateData[whereidx - 1].plateNo}');
       //print('next >> ${_locateData[whereidx + 1].plateNo}');
       _isLoading0 = false;
+      _isLoading1 = false;
       _isLoading2 = false;
     });
   }
@@ -136,8 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // 노선의 정류소 리스트를 조회하기 위한 비동기 함수
   // ***********************************
   _getStationRoute() async {
-    setState(() => _isLoading1 = true);
-
     //String station = _stationController.text;
     //print('widget item >> ${widget.routeId}');
     var response = await http.get(station_api.buildUrl(widget.routeId));
@@ -157,7 +158,6 @@ class _HomeScreenState extends State<HomeScreen> {
         print('Station error >> $errMessage');
 
         _locateData = const [];
-        _isLoading1 = false;
       });
       return;
     }
@@ -187,7 +187,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       _stationData = list;
-      _isLoading1 = false;
       stationIdx = list.indexWhere(
           (list) => list.stationId.startsWith(_locateData[myidx].stationId));
     });

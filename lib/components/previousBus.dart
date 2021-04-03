@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wetayo_bus/model/locationBus.dart';
 import 'package:wetayo_bus/model/stationRoute.dart';
+import 'package:marquee_widget/marquee_widget.dart';
 
 class PreviousBus extends StatefulWidget {
   final int myidx;
@@ -78,13 +79,15 @@ class _PreviousBusState extends State<PreviousBus> {
                         color: Colors.white),
                     textAlign: TextAlign.center,
                   )
-                : Text(
-                    widget.stationData[idx].stationName,
-                    style: TextStyle(
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                    textAlign: TextAlign.center,
+                : Marquee(
+                    child: Text(
+                      widget.stationData[idx].stationName,
+                      style: TextStyle(
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
           ),
         ),

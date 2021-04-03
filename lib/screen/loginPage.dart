@@ -5,6 +5,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wetayo_bus/main.dart';
 import 'package:wetayo_bus/model/loginState.dart';
+import 'package:flutter/services.dart';
 
 import 'MainScreen.dart';
 
@@ -38,6 +39,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
+
     final authProvider = Provider.of<SimpleState>(context, listen: false);
     return Scaffold(
       body: Container(

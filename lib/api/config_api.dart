@@ -3,7 +3,7 @@ import 'package:flutter_config/flutter_config.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class GraphqlService {
-  static final HttpLink httpLink = HttpLink("https://api.wetayo.club/wetayo",
+  static final HttpLink httpLink = HttpLink(FlutterConfig.get('GQL_URI'),
       defaultHeaders: <String, String>{
         'api_key': FlutterConfig.get('GQL_HEADER')
       });

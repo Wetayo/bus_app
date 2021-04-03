@@ -31,7 +31,9 @@ class _TimeInHourAndMinuteState extends State<TimeInHourAndMinute> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          '${_timeOfDay.hourOfPeriod}:${_timeOfDay.minute}',
+          _timeOfDay.minute < 10
+              ? '${_timeOfDay.hourOfPeriod}:0${_timeOfDay.minute}'
+              : '${_timeOfDay.hourOfPeriod}:${_timeOfDay.minute}',
           style: Theme.of(context).textTheme.headline2,
         ),
         SizedBox(
