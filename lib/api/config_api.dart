@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 class GraphqlService {
-  static final HttpLink httpLink = HttpLink("https://api.wetayo.club/wetayo",
-      defaultHeaders: <String, String>{
-        'api_key': 'cce9dd9b-fe83-4a17-a519-466edc1592bb'
-      });
+  static final HttpLink httpLink = HttpLink(DotEnv.env['GQL_URI'],
+      defaultHeaders: <String, String>{'api_key': DotEnv.env['GQL_HEADER']});
   final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
       GraphQLClient(link: httpLink as Link, cache: GraphQLCache()));
 }

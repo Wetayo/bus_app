@@ -6,11 +6,10 @@ import 'package:wetayo_bus/screen/mainScreen.dart';
 import 'model/loginState.dart';
 import 'package:flutter_config/flutter_config.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await FlutterConfig.loadEnvVariables();
-
+  await DotEnv.load(fileName: ".env");
   runApp(ChangeNotifierProvider(
     create: (_) => SimpleState(),
     child: MyApp(),
