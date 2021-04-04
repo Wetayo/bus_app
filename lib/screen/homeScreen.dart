@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _locateData = list;
 
       for (int i = 0; i < list.length; i++) {
-        print(list[i].stationSeq);
+        //print(list[i].stationSeq);
       }
       int whereidx =
           list.indexWhere((list) => list.plateNo.startsWith(widget.busNum));
