@@ -154,6 +154,12 @@ class _MyNextStationState extends State<MyNextStation> {
   }
 
   void deleteRide(String getRideStation, String getRideRoute) async {
+    final SimpleState state = Provider.of<SimpleState>(context, listen: false);
+    state.setGetRideStationId('');
+    state.setGetRideRouteId('');
+    state.setIsGetRide(false);
+    print('Delete clear!!');
+
     if (getRideStation == '' || getRideRoute == '') {
       print('station and route id is Required!!');
       return;
@@ -182,11 +188,7 @@ class _MyNextStationState extends State<MyNextStation> {
       print('mutationException >> ${result.hasException.toString()}');
       return;
     }
-    final SimpleState state = Provider.of<SimpleState>(context, listen: false);
-    state.setGetRideStationId('');
-    state.setGetRideRouteId('');
-    state.setIsGetRide(false);
-    print('Delete clear!!');
+
     return;
   }
 

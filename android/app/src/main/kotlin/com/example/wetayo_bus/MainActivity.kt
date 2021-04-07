@@ -1,4 +1,4 @@
-package com.example.wetayo_bus
+package com.wetayo.wetayo_bus
 
 import io.flutter.embedding.android.FlutterActivity
 
