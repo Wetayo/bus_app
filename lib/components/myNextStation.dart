@@ -227,7 +227,7 @@ class _MyNextStationState extends State<MyNextStation> {
                         padding: const EdgeInsets.all(15.0),
                         margin: const EdgeInsets.only(top: 40.0),
                         child: Text(
-                          '없어요',
+                          '없어요.',
                           style: TextStyle(
                             fontSize: 25.0,
                             fontWeight: FontWeight.bold,
