@@ -5,9 +5,14 @@ class SimpleState extends ChangeNotifier {
   String _routeId;
   String _busNum;
 
+  String _getRideStationId;
+  String _getRideRouteId;
+  bool _isGetRide;
+
   bool _isAuthenticated = false;
   // TODO: implement toString
 
+  // 로그인을 위한 set
   void setRouteId(String routeId) {
     _routeId = routeId;
   }
@@ -16,13 +21,33 @@ class SimpleState extends ChangeNotifier {
     _busNum = busNum;
   }
 
+  // 탑승자 제거를 위한 set
+  void setGetRideStationId(String getRideStationId) {
+    _getRideStationId = getRideStationId;
+  }
+
+  void setGetRideRouteId(String getRideRouteId) {
+    _getRideRouteId = getRideRouteId;
+  }
+
+  void setIsGetRide(bool getIsGetRide) {
+    _isGetRide = getIsGetRide;
+  }
+
+  ///////////////////////////////////
   set isAuthenticated(bool isAuth) {
     _isAuthenticated = isAuth;
     notifyListeners();
   }
 
+  // 로그인을 위한 get
   String get routeId => _routeId;
   String get busNum => _busNum;
+
+  // 탑승자 제거를 위한 get
+  String get rideStationId => _getRideStationId;
+  String get rideRouteId => _getRideRouteId;
+  bool get isGetRide => _isGetRide;
 
   bool get isAuthenticated {
     return this._isAuthenticated;

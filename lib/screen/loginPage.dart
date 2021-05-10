@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     //       builder: (context) => MainScreen(routeId: routeId, busNum: busNum),
     //     ));
 
-    //// 상태 관리 버전
+    //// Provider 상태 관리 버전
     print('Login Push');
     final SimpleState state = Provider.of<SimpleState>(context, listen: false);
     state.setRouteId(routeId);
