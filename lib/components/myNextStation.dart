@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wetayo_bus/model/locationBus.dart';
 import 'package:wetayo_bus/model/stationRoute.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:marquee_widget/marquee_widget.dart';
 
 class MyNextStation extends StatefulWidget {
   final int myidx;
@@ -29,10 +30,10 @@ class _MyNextStationState extends State<MyNextStation> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    test();
+    matchStation();
   }
 
-  void test() {
+  void matchStation() {
     try {
       setState(() {
         List<stationRoute> stationList = widget.stationData;
@@ -47,9 +48,9 @@ class _MyNextStationState extends State<MyNextStation> {
         _isCurrentBus = false;
       });
     } on RangeError catch (e) {
-      print('set test');
+      print('set matchStation');
       setState(() {
-        print('test range');
+        print('matchStation range');
         _isCurrentBus = true;
       });
     }
@@ -68,13 +69,15 @@ class _MyNextStationState extends State<MyNextStation> {
                       ? Center(
                           child: CircularProgressIndicator(),
                         )
-                      : Text(
-                          widget.stationData[idx].stationName,
-                          style: TextStyle(
-                              fontSize: 25.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                          textAlign: TextAlign.center,
+                      : Marquee(
+                          child: Text(
+                            widget.stationData[idx].stationName,
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                 ),
               ),
@@ -94,7 +97,23 @@ class _MyNextStationState extends State<MyNextStation> {
                   builder: (QueryResult result,
                       {VoidCallback refetch, FetchMore fetchMore}) {
                     if (result.exception != null) {
-                      return Center(child: Text("없어요"));
+                      return Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.yellow,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0))),
+                          padding: const EdgeInsets.all(15.0),
+                          margin: const EdgeInsets.only(top: 40.0),
+                          child: Text(
+                            '없어요',
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      );
                     }
                     if (result.isLoading) {
                       // setState(() {
@@ -107,7 +126,7 @@ class _MyNextStationState extends State<MyNextStation> {
                     }
                     if (result.data["getRide"] != true) {
                       return Center(
-                        child: Text("예약 정보가 없어오."),
+                        child: Text("없어요."),
                       );
                     } else {
                       // setState(() {
@@ -115,7 +134,23 @@ class _MyNextStationState extends State<MyNextStation> {
                       // });
 
                       print(result.data.toString());
-                      return Text('승차 예약이 있어요');
+                      return Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.yellow,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0))),
+                          padding: const EdgeInsets.all(15.0),
+                          margin: const EdgeInsets.only(top: 40.0),
+                          child: Text(
+                            '승차 예약이 있어요',
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      );
                     }
                   },
                 ),
