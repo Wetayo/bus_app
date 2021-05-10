@@ -89,10 +89,8 @@ class _MyNextStationState extends State<MyNextStation> {
             getRide(stationId: \$stationId routeId: \$routeId)
               }"""),
                       variables: {
-                        'stationId': int.parse(
-                            widget.locateData[widget.myidx].stationId),
-                        'routeId':
-                            int.parse(widget.locateData[widget.myidx].routeId),
+                        'stationId': 999999999,
+                        'routeId': 999999999,
                       }),
                   builder: (QueryResult result,
                       {VoidCallback refetch, FetchMore fetchMore}) {

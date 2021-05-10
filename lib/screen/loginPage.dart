@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _routeId = "";
+  String _routeId = "224000002";
   String _busNum = "";
 
   void onClickLogin(BuildContext context, String routeId, String busNum) {
