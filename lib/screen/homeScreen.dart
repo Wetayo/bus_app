@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _getStationRoute();
     _getLocationBusList();
 
-    Timer.periodic(Duration(seconds: 10), (timer) {
+    Timer.periodic(Duration(seconds: 5), (timer) {
       //_getStationRoute();
       _getLocationBusList();
     });
