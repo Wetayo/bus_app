@@ -49,12 +49,20 @@ class _MyNextStationState extends State<MyNextStation> {
     getRide(widget.locateData[widget.myidx].stationId,
         widget.locateData[widget.myidx].routeId);
 
-    // final SimpleState state = Provider.of<SimpleState>(context, listen: false);
-    // if (state.isGetRide &&
-    //     state.rideStationId != widget.locateData[widget.myidx].stationId) {
-    //   print('삭제처리중입니다...');
-    //   deleteRide(state.rideStationId, state.rideRouteId);
-    // }
+    final SimpleState state = Provider.of<SimpleState>(context, listen: false);
+    print(
+        '_currentRideStation >> ${state.rideStationId} ------ 현재위치버스 >> ${widget.locateData[widget.myidx].stationId}');
+
+    if (state.isGetRide &&
+        state.rideStationId != widget.locateData[widget.myidx].stationId) {
+      print('삭제처리중입니다...');
+
+      setState(() {
+        _isRide = true;
+      });
+
+      deleteRide(state.rideStationId, state.rideRouteId);
+    }
   }
 
   void matchStation() {
@@ -84,7 +92,7 @@ class _MyNextStationState extends State<MyNextStation> {
     final Link _link = HttpLink(
       DotEnv.env['GQL_URI'],
       defaultHeaders: {
-        'api_key': DotEnv.env['GQL_HEADER'],
+        'api-key': DotEnv.env['GQL_HEADER'],
       },
     );
 
@@ -108,8 +116,8 @@ class _MyNextStationState extends State<MyNextStation> {
               }""",
       ),
       variables: {
-        'stationId': getRideStation,
-        'routeId': getRideRoute,
+        'stationId': 999999999,
+        'routeId': 999999999,
       },
     );
 
@@ -140,15 +148,15 @@ class _MyNextStationState extends State<MyNextStation> {
     /////////////////////////////////////////////////////////////
     print('_isCurrentRide >> $_isCurrentRide');
     //////////////////////////////////////////////////////////////
-    final SimpleState state = Provider.of<SimpleState>(context, listen: false);
-    print(
-        '_currentRideStation >> ${state.rideStationId} ------ 현재위치버스 >> ${widget.locateData[widget.myidx].stationId}');
+    // final SimpleState state = Provider.of<SimpleState>(context, listen: false);
+    // print(
+    //     '_currentRideStation >> ${state.rideStationId} ------ 현재위치버스 >> ${widget.locateData[widget.myidx].stationId}');
 
-    if (state.isGetRide &&
-        state.rideStationId != widget.locateData[widget.myidx].stationId) {
-      print('삭제처리중입니다...');
-      deleteRide(state.rideStationId, state.rideRouteId);
-    }
+    // if (state.isGetRide &&
+    //     state.rideStationId != widget.locateData[widget.myidx].stationId) {
+    //   print('삭제처리중입니다...');
+    //   deleteRide(state.rideStationId, state.rideRouteId);
+    // }
 
     return;
   }
@@ -177,8 +185,8 @@ class _MyNextStationState extends State<MyNextStation> {
                     }""",
       ),
       variables: <String, dynamic>{
-        'stationId': int.parse(getRideStation),
-        'routeId': int.parse(getRideRoute),
+        'stationId': 999999999,
+        'routeId': 999999999,
       },
     );
 

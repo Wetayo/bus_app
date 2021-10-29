@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _getStationRoute();
     _getLocationBusList();
 
-    Timer.periodic(Duration(seconds: 10), (timer) {
+    Timer.periodic(Duration(seconds: 5), (timer) {
       //_getStationRoute();
       _getLocationBusList();
     });
@@ -353,7 +353,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.only(
                               left: 15.0, top: 25.0, bottom: 10.0),
                           child: Text(
-                            '이전 버스',
+                            '뒷 버스',
                             style: TextStyle(
                               fontSize: (35.0),
                               fontWeight: FontWeight.bold,

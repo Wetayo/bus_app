@@ -7,7 +7,7 @@ class SimpleState extends ChangeNotifier {
 
   String _getRideStationId;
   String _getRideRouteId;
-  bool _isGetRide;
+  bool _isGetRide = false;
 
   bool _isAuthenticated = false;
   // TODO: implement toString
